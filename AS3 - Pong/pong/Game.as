@@ -1,4 +1,4 @@
-﻿//Bugs:
+//Bugs:
 //1.Resizing
 //2.Hitting the paddle breadthwise
 //3.Hard-coded dimensions
@@ -21,7 +21,7 @@ package pong
 		/** Score of the game */
 		private var scores:Score = new Score();
 		
-		/** The player2's paddle */
+		/** The user's 2nd paddle */
 		private var userPaddle2:UserPaddle = new UserPaddle();
 		
 		/** The user's paddle */
@@ -138,7 +138,7 @@ package pong
 			// Listen for the user pressing the mouse. When they do, reset and play agplayer2n
 			this.stage.addEventListener(MouseEvent.CLICK, gameOverMouseListener);
 			
-			// Wplayer2t for the user to press the mouse
+			// Wait for the user to press the mouse
 			removeEventListener(Event.ENTER_FRAME, update);
 		}
 		
@@ -148,7 +148,7 @@ package pong
 		 */
 		private function gameOverMouseListener(event:MouseEvent):void
 		{
-			// Reset the game and stop listening for the user to do so agplayer2n
+			// Reset the game and stop listening for the user to do so again
 			reset(true);
 			this.stage.removeEventListener(MouseEvent.CLICK, gameOverMouseListener);
 
