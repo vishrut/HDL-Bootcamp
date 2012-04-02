@@ -10,16 +10,10 @@
 	 */
 	public class Score extends MovieClip
 	{
-		/** The text field displaying the score */
 		private var score:TextField;
 		
-		/** Format of the text field */
 		private var format:TextFormat;
 	
-		/**
-		 * Constructor. Creates a text field and sets it up with the default score of
-		 * zero versus zero.
-		 */
 		function Score()
 		{
 			// Create the text field and go to the next score in the count
@@ -29,7 +23,7 @@
 			
 			// Set up the format to use a big monospaced font
 			this.format = new TextFormat();
-			this.format.font = "_typewriter";
+			this.format.font = "ubuntu";
 			this.format.size = 75;
 			this.format.color = 0xffffff;
 	

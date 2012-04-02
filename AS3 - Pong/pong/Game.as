@@ -1,4 +1,4 @@
-//Bugs:
+﻿//Issues:
 //1.Resizing
 //2.Hitting the paddle breadthwise
 //3.Hard-coded dimensions
@@ -12,20 +12,17 @@ package pong
 	
 	public class Game extends MovieClip
 	{
-		/** The area in which the ball is in play */
-		static var playArea:Rectangle;
-		
 		/** Game over display */
 		private var gameOver:GameOver = new GameOver();
 		
 		/** Score of the game */
 		private var scores:Score = new Score();
 		
-		/** The user's 2nd paddle */
-		private var userPaddle2:UserPaddle = new UserPaddle();
-		
 		/** The user's paddle */
 		private var userPaddle:UserPaddle = new UserPaddle();
+		
+		/** The user's 2nd paddle */
+		private var userPaddle2:UserPaddle = new UserPaddle();
 		
 		/** The ball the players bounce back and forth */
 		private var ball:Ball = new Ball();
@@ -38,33 +35,30 @@ package pong
 		
 		function Game()
 		{
+			gameMethod();
+		}
+		
+		private function gameMethod():void{
 			// The height of a wall
 			var wallHeight:Number = 20;
 			
 			// Define the play area
-			Game.playArea = new Rectangle(
-				0,
-				wallHeight,
-				this.stage.stageWidth,
-				this.stage.stageHeight - wallHeight
-			);
-			this.graphics.beginFill(0x000000, 1.0);
-			this.graphics.drawRect(0, wallHeight,this.stage.stageWidth, this.stage.stageHeight - wallHeight);
-			this.graphics.endFill();
 			
 			// Setup the graphical elements on the stage
 			this.ball.setDimensions(20, 20);
 			this.wallTop.setDimensions(this.stage.stageWidth, wallHeight);
-			this.wallBottom.setDimensions(Game.playArea.width, wallHeight);
+			this.wallBottom.setDimensions(this.stage.stageWidth, wallHeight);
+			//this.wallTop.x = 0;
+			this.wallTop.y = 0;
 			this.userPaddle.setDimensions(15, 75);
 			this.userPaddle2.setDimensions(15, 75);
 			this.wallBottom.y = this.stage.stageHeight - this.wallBottom.height;
 			this.scores.y = this.wallTop.y + this.wallTop.height;
 			this.scores.x = this.stage.stageWidth/2;
-			this.userPaddle.x = 18;
-			this.userPaddle.y = 161.9;
-			this.userPaddle2.x = 507;
-			this.userPaddle2.y = 162.5;
+			this.userPaddle.x = this.userPaddle.width;
+			this.userPaddle.y = this.stage.stageWidth/2;
+			this.userPaddle2.x = this.stage.stageWidth-2*this.userPaddle2.width;
+			this.userPaddle2.y = this.stage.stageWidth/2;
 
 			addChild(this.scores);
 			addChild(this.gameOver);
@@ -93,7 +87,35 @@ package pong
 			this.userPaddle2.lockToMouse();
 						
 			// Update the game every time a frame is played
-			addEventListener(Event.ENTER_FRAME, update);
+			addEventListener(Event.ENTER_FRAME, update);	
+			stage.addEventListener(Event.RESIZE, resizeStage);
+		}
+		
+		private function resizeStage(e:Event):void{
+			//gameMethod();
+			// The height of a wall
+			var wallHeight:Number = 20;
+			
+			// Define the play area
+			
+			// Setup the graphical elements on the stage
+			this.ball.setDimensions(20, 20);
+			this.wallTop.setDimensions(this.stage.stageWidth, wallHeight);
+			this.wallBottom.setDimensions(this.stage.stageWidth, wallHeight);
+			//this.wallTop.x = 0;
+			this.wallTop.y = 0;
+			this.userPaddle.setDimensions(15, 75);
+			this.userPaddle2.setDimensions(15, 75);
+			this.wallBottom.y = this.stage.stageHeight - this.wallBottom.height;
+			this.scores.y = this.wallTop.y + this.wallTop.height;
+			this.scores.x = this.stage.stageWidth/2;
+			this.userPaddle.x = this.userPaddle.width;
+			this.userPaddle.y = this.stage.stageWidth/2;
+			this.userPaddle2.x = this.stage.stageWidth-2*this.userPaddle2.width;
+			this.userPaddle2.y = this.stage.stageWidth/2;
+			Paddle.topBound = this.wallTop.y + this.wallTop.height;
+			Paddle.bottomBound = this.wallBottom.y - this.userPaddle.height;
+			
 		}
 		
 		/**
@@ -127,6 +149,7 @@ package pong
 			this.gameOver.x = (this.stage.stageWidth - this.gameOver.width) / 2;
 			this.gameOver.y = (this.stage.stageHeight - this.gameOver.height) / 2;
 			this.gameOver.visible = true;
+			this.ball.visible = false;
 			
 			// Stop allowing the player to control the paddle
 			this.userPaddle.unlockFromMouse();
@@ -150,6 +173,7 @@ package pong
 		{
 			// Reset the game and stop listening for the user to do so again
 			reset(true);
+			this.ball.visible = true;
 			this.stage.removeEventListener(MouseEvent.CLICK, gameOverMouseListener);
 
 			this.userPaddle.lockToMouse();
@@ -179,7 +203,7 @@ package pong
 			}
 			
 			// If the game is not over, keep running the game by going to our own frame
-			// to form the mplayer2n loop
+			// to form the main loop
 			gotoAndPlay(1);
 		}
 		

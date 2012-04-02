@@ -1,8 +1,5 @@
 ﻿package pong
 {
-	/**
-	 * A paddle used to hit the ball
-	 */
 	public class Paddle extends RectangularMovieClip implements Bouncer
 	{
 		/** Top bound of movement */
@@ -24,13 +21,8 @@
 			this.y = Math.max(Paddle.topBound, Math.min(Paddle.bottomBound, y));
 		}
 		
-		/**
-		 * Bounce a ball off of the paddle.
-		 * @param ball Ball to bounce
-		 */
 		public function bounce(ball:Ball):void
 		{
-			// Reverse X direction and bounce horizontally
 			ball.vX = -ball.vX;
 			ball.x += ball.vX;
 			

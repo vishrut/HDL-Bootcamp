@@ -1,14 +1,10 @@
 ﻿package pong
 {
-	/**
-	 * The ball the two paddles bounce back and forth
-	 */
+
 	public class Ball extends RectangularMovieClip
 	{
-		/** Velocity in the X direction */
 		var vX:Number = 0;
 		
-		/** Velocity in the Y direction */
 		var vY:Number = 0;
 		
 		/** Bouncers the ball collides with (type: Bouncer) */
@@ -20,12 +16,12 @@
 			this.x += vX;
 			this.y += vY;
 			
-			if (this.x < Game.playArea.x+18)
+			if (this.x < 20)
 			{
-				return 1;
+				return 1;				
 			}
 
-			if (this.x >= Game.playArea.x + 507 - 7)
+			if (this.x >= stage.stageWidth - 30)
 			{
 				return 1;
 			}
@@ -45,7 +41,6 @@
 						return 0;
 					else 
 						return -1;
-					//break;
 				}
 			}
 			
