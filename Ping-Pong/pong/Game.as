@@ -9,11 +9,15 @@ package pong
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Rectangle;
+	import flash.display.StageScaleMode;
+	import flash.display.StageAlign;
+
+
 	
 	public class Game extends MovieClip
 	{
 		/** Game over display */
-		private var gameOver:GameOver = new GameOver();
+		private var gameOverBox:GameOver = new GameOver();
 		
 		/** Score of the game */
 		private var scores:Score = new Score();
@@ -39,6 +43,8 @@ package pong
 		}
 		
 		private function gameMethod():void{
+			this.stage.scaleMode = StageScaleMode.NO_SCALE;	// We don't want stage to scale by itself
+			this.stage.align = StageAlign.TOP_LEFT;			
 			// The height of a wall
 			var wallHeight:Number = 20;
 			
@@ -55,13 +61,15 @@ package pong
 			this.wallBottom.y = this.stage.stageHeight - this.wallBottom.height;
 			this.scores.y = this.wallTop.y + this.wallTop.height;
 			this.scores.x = this.stage.stageWidth/2;
+			trace(this.scores.x);
 			this.userPaddle.x = this.userPaddle.width;
-			this.userPaddle.y = this.stage.stageWidth/2;
+			this.userPaddle.y = this.stage.stageHeight/2;
 			this.userPaddle2.x = this.stage.stageWidth-2*this.userPaddle2.width;
-			this.userPaddle2.y = this.stage.stageWidth/2;
+			this.userPaddle2.y = this.stage.stageHeight/2;
+			trace(this.gameOverBox.width/2);
 
 			addChild(this.scores);
-			addChild(this.gameOver);
+			addChild(this.gameOverBox);
 			addChild(this.userPaddle2);
 			addChild(this.ball);
 			addChild(this.userPaddle);
@@ -78,9 +86,9 @@ package pong
 				this.wallTop,
 				this.wallBottom
 			];
-			
 			// Reset the game to initialize it
 			reset(true);
+			beginGame("Click to Start");
 			
 			// Lock the player's paddle to the mouse to give them control
 			this.userPaddle.lockToMouse();
@@ -95,7 +103,6 @@ package pong
 			//gameMethod();
 			// The height of a wall
 			var wallHeight:Number = 20;
-			
 			// Define the play area
 			
 			// Setup the graphical elements on the stage
@@ -109,12 +116,18 @@ package pong
 			this.wallBottom.y = this.stage.stageHeight - this.wallBottom.height;
 			this.scores.y = this.wallTop.y + this.wallTop.height;
 			this.scores.x = this.stage.stageWidth/2;
+			trace(this.scores.x);
 			this.userPaddle.x = this.userPaddle.width;
-			this.userPaddle.y = this.stage.stageWidth/2;
+			this.userPaddle.y = this.stage.stageHeight/2;
 			this.userPaddle2.x = this.stage.stageWidth-2*this.userPaddle2.width;
-			this.userPaddle2.y = this.stage.stageWidth/2;
+			this.userPaddle2.y = this.stage.stageHeight/2;
 			Paddle.topBound = this.wallTop.y + this.wallTop.height;
 			Paddle.bottomBound = this.wallBottom.y - this.userPaddle.height;
+			if(gameOverBox.visible){
+				
+			this.gameOverBox.x = this.stage.stageWidth/2-this.gameOverBox.width/2;
+			this.gameOverBox.y = this.stage.stageHeight/2-this.gameOverBox.height/2;
+			}
 			
 		}
 		
@@ -125,7 +138,7 @@ package pong
 		private function reset(clearScores:Boolean):void
 		{
 			// Hide the game over
-			this.gameOver.visible = false;
+			this.gameOverBox.visible = false;
 
 			// Set the ball's initial position to be the center of the stage
 			this.ball.x = (this.stage.stageWidth - this.ball.width)/2;
@@ -145,10 +158,12 @@ package pong
 		private function endGame(msg:String):void
 		{
 			// Show the requested message
-			this.gameOver.setMessage(msg);
-			this.gameOver.x = (this.stage.stageWidth - this.gameOver.width) / 2;
-			this.gameOver.y = (this.stage.stageHeight - this.gameOver.height) / 2;
-			this.gameOver.visible = true;
+			
+			this.gameOverBox.setMessage(msg);
+			this.gameOverBox.x = this.stage.stageWidth/2-this.gameOverBox.width/2;
+			this.gameOverBox.y = this.stage.stageHeight/2-this.gameOverBox.height/2;
+			
+			this.gameOverBox.visible = true;
 			this.ball.visible = false;
 			
 			// Stop allowing the player to control the paddle
@@ -164,6 +179,33 @@ package pong
 			// Wait for the user to press the mouse
 			removeEventListener(Event.ENTER_FRAME, update);
 		}
+		
+		private function beginGame(msg:String):void
+		{
+			// Show the requested message
+			
+			this.gameOverBox.setBeginMessage(msg);
+			this.gameOverBox.x = this.stage.stageWidth/2-this.gameOverBox.width/2;
+			this.gameOverBox.y = this.stage.stageHeight/2-this.gameOverBox.height/2;
+			
+			this.gameOverBox.visible = true;
+			this.ball.visible = false;
+			
+			// Stop allowing the player to control the paddle
+			this.userPaddle.unlockFromMouse();
+			this.userPaddle2.unlockFromMouse();
+						
+			// Stop the ball
+			this.ball.vX = this.ball.vY = 0;
+			
+			// Listen for the user pressing the mouse. When they do, reset and play agplayer2n
+			this.stage.addEventListener(MouseEvent.CLICK, gameOverMouseListener);
+			
+			// Wait for the user to press the mouse
+			removeEventListener(Event.ENTER_FRAME, update);
+		}
+		
+		
 		
 		/**
 		 * Listen for mouse clicks on the game over screen

@@ -27,8 +27,14 @@
 		}
 		
 		function setMessage(msg:String):void
-		{
+		{	
 			this.gameOver.text = "Game Over\n" + "Score : "+msg;
+			this.gameOver.setTextFormat(this.format);
+		}
+		
+		function setBeginMessage(msg:String):void
+		{	
+			this.gameOver.text = msg;
 			this.gameOver.setTextFormat(this.format);
 		}
 	}
