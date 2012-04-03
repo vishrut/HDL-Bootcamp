@@ -146,8 +146,9 @@ package pong
 			
 			// Serve the ball by giving it a random initial velocity
 			this.ball.vX = (Math.random() % 2 == 0 ? 1 : -1) * 10;
+			//trace(Math.random());
 			this.ball.vY = Math.random() % 5;
-			
+			//trace(this.ball.vY);
 			// Reset the scores
 			if (clearScores)
 			{
