@@ -1,0 +1,3 @@
+Renaming according to conventions
+Modifying TextFields
+Timer display

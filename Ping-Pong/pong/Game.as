@@ -17,7 +17,7 @@ package pong
 	public class Game extends MovieClip
 	{
 		/** Game over display */
-		private var gameOverBox:GameOver = new GameOver();
+		private var messageBox:MessageBox = new MessageBox();
 		
 		/** Score of the game */
 		private var scores:Score = new Score();
@@ -36,6 +36,11 @@ package pong
 		
 		/** The bottom wall of the play area */
 		private var wallBottom:Wall = new Wall();
+		
+		private var prevStageWidth:Number;
+		private var prevStageHeight:Number;		
+		
+		public static var isPaused:Boolean = false;
 		
 		function Game()
 		{
@@ -61,15 +66,15 @@ package pong
 			this.wallBottom.y = this.stage.stageHeight - this.wallBottom.height;
 			this.scores.y = this.wallTop.y + this.wallTop.height;
 			this.scores.x = this.stage.stageWidth/2;
-			trace(this.scores.x);
+			//trace(this.scores.x);
 			this.userPaddle.x = this.userPaddle.width;
 			this.userPaddle.y = this.stage.stageHeight/2;
 			this.userPaddle2.x = this.stage.stageWidth-2*this.userPaddle2.width;
 			this.userPaddle2.y = this.stage.stageHeight/2;
-			trace(this.gameOverBox.width/2);
+			//trace(this.messageBox.width/2);
 
 			addChild(this.scores);
-			addChild(this.gameOverBox);
+			addChild(this.messageBox);
 			addChild(this.userPaddle2);
 			addChild(this.ball);
 			addChild(this.userPaddle);
@@ -88,11 +93,15 @@ package pong
 			];
 			// Reset the game to initialize it
 			reset(true);
-			beginGame("Click to Start");
+			pauseGame("Click to Start");
 			
 			// Lock the player's paddle to the mouse to give them control
 			this.userPaddle.lockToMouse();
 			this.userPaddle2.lockToMouse();
+			
+			prevStageWidth = this.stage.stageWidth;
+			prevStageHeight = this.stage.stageHeight;
+			
 						
 			// Update the game every time a frame is played
 			addEventListener(Event.ENTER_FRAME, update);	
@@ -102,31 +111,40 @@ package pong
 		private function resizeStage(e:Event):void{
 			//gameMethod();
 			// The height of a wall
+			//isPaused = true;
+			trace(this.ball.x);
+			this.ball.x = this.ball.x*(this.stage.stageWidth/prevStageWidth);
+			trace(this.ball.x);
+			this.ball.y = this.ball.y*(this.stage.stageHeight/prevStageHeight);
+			//isPaused = false;
+			
+			
 			var wallHeight:Number = 20;
 			// Define the play area
 			
 			// Setup the graphical elements on the stage
-			this.ball.setDimensions(20, 20);
+			//this.ball.setDimensions(20, 20);
 			this.wallTop.setDimensions(this.stage.stageWidth, wallHeight);
 			this.wallBottom.setDimensions(this.stage.stageWidth, wallHeight);
 			//this.wallTop.x = 0;
-			this.wallTop.y = 0;
-			this.userPaddle.setDimensions(15, 75);
-			this.userPaddle2.setDimensions(15, 75);
+			//this.wallTop.y = 0;
+			//this.userPaddle.setDimensions(15, 75);
+			//this.userPaddle2.setDimensions(15, 75);
 			this.wallBottom.y = this.stage.stageHeight - this.wallBottom.height;
 			this.scores.y = this.wallTop.y + this.wallTop.height;
 			this.scores.x = this.stage.stageWidth/2;
-			trace(this.scores.x);
+			//trace(this.scores.x);
 			this.userPaddle.x = this.userPaddle.width;
 			this.userPaddle.y = this.stage.stageHeight/2;
 			this.userPaddle2.x = this.stage.stageWidth-2*this.userPaddle2.width;
 			this.userPaddle2.y = this.stage.stageHeight/2;
 			Paddle.topBound = this.wallTop.y + this.wallTop.height;
 			Paddle.bottomBound = this.wallBottom.y - this.userPaddle.height;
-			if(gameOverBox.visible){
+			//pauseGame("Game Paused");
+			if(messageBox.visible){
 				
-			this.gameOverBox.x = this.stage.stageWidth/2-this.gameOverBox.width/2;
-			this.gameOverBox.y = this.stage.stageHeight/2-this.gameOverBox.height/2;
+			this.messageBox.x = this.stage.stageWidth/2-this.messageBox.width/2;
+			this.messageBox.y = this.stage.stageHeight/2-this.messageBox.height/2;
 			}
 			
 		}
@@ -138,7 +156,7 @@ package pong
 		private function reset(clearScores:Boolean):void
 		{
 			// Hide the game over
-			this.gameOverBox.visible = false;
+			this.messageBox.visible = false;
 
 			// Set the ball's initial position to be the center of the stage
 			this.ball.x = (this.stage.stageWidth - this.ball.width)/2;
@@ -160,11 +178,11 @@ package pong
 		{
 			// Show the requested message
 			
-			this.gameOverBox.setMessage(msg);
-			this.gameOverBox.x = this.stage.stageWidth/2-this.gameOverBox.width/2;
-			this.gameOverBox.y = this.stage.stageHeight/2-this.gameOverBox.height/2;
+			this.messageBox.setMessage(msg);
+			this.messageBox.x = this.stage.stageWidth/2-this.messageBox.width/2;
+			this.messageBox.y = this.stage.stageHeight/2-this.messageBox.height/2;
 			
-			this.gameOverBox.visible = true;
+			this.messageBox.visible = true;
 			this.ball.visible = false;
 			
 			// Stop allowing the player to control the paddle
@@ -181,15 +199,15 @@ package pong
 			removeEventListener(Event.ENTER_FRAME, update);
 		}
 		
-		private function beginGame(msg:String):void
+		private function pauseGame(msg:String):void
 		{
 			// Show the requested message
 			
-			this.gameOverBox.setBeginMessage(msg);
-			this.gameOverBox.x = this.stage.stageWidth/2-this.gameOverBox.width/2;
-			this.gameOverBox.y = this.stage.stageHeight/2-this.gameOverBox.height/2;
+			this.messageBox.setBeginMessage(msg);
+			this.messageBox.x = this.stage.stageWidth/2-this.messageBox.width/2;
+			this.messageBox.y = this.stage.stageHeight/2-this.messageBox.height/2;
 			
-			this.gameOverBox.visible = true;
+			this.messageBox.visible = true;
 			this.ball.visible = false;
 			
 			// Stop allowing the player to control the paddle

@@ -5,18 +5,18 @@
 	import flash.text.TextFormat;
 	import flash.text.TextFieldAutoSize;
 	
-	public class GameOver extends MovieClip
+	public class MessageBox extends MovieClip
 	{
-		private var gameOver:TextField;
+		private var messageText:TextField;
 		
 		private var format:TextFormat;
 		
-		function GameOver()
+		function MessageBox()
 		{
 			// Create the text field and go to the next score in the count
-			this.gameOver = new TextField();
-			this.gameOver.autoSize = TextFieldAutoSize.LEFT;
-			addChild(this.gameOver);
+			this.messageText = new TextField();
+			this.messageText.autoSize = TextFieldAutoSize.LEFT;
+			addChild(this.messageText);
 			
 			// Set up the format to use a big monospaced font
 			this.format = new TextFormat();
@@ -28,14 +28,14 @@
 		
 		function setMessage(msg:String):void
 		{	
-			this.gameOver.text = "Game Over\n" + "Score : "+msg;
-			this.gameOver.setTextFormat(this.format);
+			this.messageText.text = "Game Over\n" + "Score : "+msg;
+			this.messageText.setTextFormat(this.format);
 		}
 		
 		function setBeginMessage(msg:String):void
 		{	
-			this.gameOver.text = msg;
-			this.gameOver.setTextFormat(this.format);
+			this.messageText.text = msg;
+			this.messageText.setTextFormat(this.format);
 		}
 	}
 }

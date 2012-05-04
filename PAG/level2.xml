@@ -1,0 +1,14 @@
+<level>
+	<levelNum>2</levelNum>
+	<maxQ>2</maxQ>
+	<facts>
+		<fact>
+			<question>5 X 8</question>
+			<answer>40</answer>
+ 		</fact>
+		<fact>
+			<question>3 X 8</question>
+			<answer>24</answer>
+ 		</fact>
+	</facts>
+</level>
